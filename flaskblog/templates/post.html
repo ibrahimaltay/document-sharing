@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+<link rel="stylesheet" href="/static/style.css" />
+{% block asd %}
+
+
+<article class="media content-section">
+	<img class = "rounded-circle article-img " src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
+  <div class="media-body">
+    <div class="article-metadata">
+      <a class="mr-2" href="{{url_for('user_posts', username=post.author.username)}}">{{ post.author.username }}</a>
+      <small class="text-muted">{{ post.date_posted.strftime('%d/%m/%Y') }}</small>
+      {%if post.author == current_user or current_user.isadmin %}
+		<div>
+			{% if post.isverified == False %}
+			<a class="btn btn-success btn-sm mt-1 mb-1" href="{{url_for('verify_post', post_id=post.id ) }}">Onayla</a>
+			<button type = "Button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#unverifyModal">Sil  </button>
+			{%endif%}
+			{%if post.isverified == True%}
+			<button type = "Button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal">Sil  </button>
+			{%endif%}
+
+			<a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{url_for('update_post', post_id=post.id ) }}">Düzenle</a>
+			
+	  {%endif%}
+			<a class="btn btn-info btn-sm mt-1 mb-1" href="{{url_for('static', filename= 'files/' + post.doc_file)}}" download="{{post.title}}">İndir</a>
+
+		</div>
+      
+    	 <h2 class="article-title">{{ post.title }}</h2>
+    	<p class="article-content">{{ post.content }}</p>
+    </div>
+
+   
+  </div>
+</article>
+
+
+
+
+
+<!-- Modal -->
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="deleteModalLabel">Gönderiyi Sil?</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+	        <form action="{{url_for('delete_post', post_id=post.id)}}" method="POST">
+	        	
+			<input type="submit" class="btn btn-danger" value="Sil" >
+
+	        </form>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="modal fade" id="unverifyModal" tabindex="-1" role="dialog" aria-labelledby="unverifyModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="deleteModalLabel">Gönderiyi Sil?</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Vazgeç</button>
+	        <form action="{{url_for('unverify_post', post_id=post.id)}}" method="POST">
+	        	
+			<input type="submit" class="btn btn-danger" value="Sil" >
+
+	        </form>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
+{% endblock asd %}
